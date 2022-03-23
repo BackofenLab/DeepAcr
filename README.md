@@ -10,8 +10,13 @@ DeepAcr_masterscript.py has been tested with Python 3.7 To run it, we recommend 
 
 
 ```
-wget https://github.com/BackofenLab/DeepAcr/archive/1.0.0.tar.gz
-tar -xzf 1.0.0.tar.gz
+git clone git@github.com:BackofenLab/Acr.git
+
+OR 
+
+https://github.com/BackofenLab/Acr/archive/refs/heads/main.zip
+unzip main.zip
+
 ```
 
 ### Second step: (conda)
@@ -33,9 +38,9 @@ Create and activate environment for DeepAcr.
 conda env create -f environment.yml -n DeepAcr-env
 conda activate DeepAcr-env
 ```
-
-After using DeepAcr_masterscript.py you can deactivate the environment.
+### Quick run with the default parameters
 
 ```
-conda deactivate
+python3.7 DeepAcr_masterscript.py -h 
+
 ```
