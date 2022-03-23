@@ -44,3 +44,8 @@ conda activate DeepAcr-env
 python3.7 DeepAcr_masterscript.py -h 
 
 ```
+## Citation
+If you use our tool, please cite our article
+- [Anti-CRISPR prediction using deep learning reveals an inhibitor of Cas13b nucleases ](https://xxx)
+  Katharina G. Wandera, Omer S. Alkhnbashi, Harris V.I. Bassett, Alexander Mitrofanov, Sven Hauns, Anzhela Migur, Rolf Backofen, Chase L. Beisel, 
+  Molecular Cell, xx(xx), xx-xxx, 2022, DOI(xxx/xx/xx).
