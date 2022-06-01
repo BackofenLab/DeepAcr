@@ -23,7 +23,7 @@ unzip main.zip
 
 ### Second step: download the deep Learning (ML) models
 
-Due to GitHub's file size constraints, we made our DL models available in Google Drive. You can download them  [here](https://drive.google.com/f). Save both tar.gz files inside modules directory.
+Due to GitHub's file size constraints, we made our DL models available in Google Drive. You can download them  [here](https://drive.google.com/drive/folders/10JgxPI-Z4DOMUTycrZM0_dYb_iP1yJES?usp=sharing). Save both tar.gz files inside modules directory.
 
 
 ### Third step: (conda)
