@@ -21,7 +21,12 @@ unzip main.zip
 
 ```
 
-### Second step: (conda)
+### Second step: download the deep Learning (ML) models
+
+Due to GitHub's file size constraints, we made our ML models available in Google Drive. You can download them  [here](https://drive.google.com/f). Save both tar.gz files inside model directory.
+
+
+### Third step: (conda)
 
 First we install Miniconda for python 3.
 Miniconda can be downloaded from here: [miniconda](https://docs.conda.io/en/latest/miniconda.html).
@@ -43,7 +48,7 @@ conda activate DeepAcr-env
 ### Quick run with the default parameters
 
 ```
-python3.7 predict.py -f <file> -m <path_to_models> -d <path_to_data>
+python3.7 DeepAcr_masterscript -f <file> -m <path_to_models> -d <path_to_data>
  
 
 ```
