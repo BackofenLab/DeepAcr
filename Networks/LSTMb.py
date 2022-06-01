@@ -4,23 +4,21 @@ import numpy as np
 import pandas as pd
 import torch
 
-
-
 class LSTMb(torch.nn.Module):
 
-    def __init__(self, num_features,max_length, kernel_size = 15, stride = 10, conv_out = 20, dropout = 0.5, lstm_out = 10, lin1_nodes = 100, lin2_nodes = 41):
+    def __init__(self, nf,ml, ks = 15, st = 10, co = 20, dropout = 0.5, lo = 10, n1 = 100, n2 = 41):
 
         super(LSTMb, self).__init__()
-        self.database_num_features = torch.tensor([num_features])
-        self.convolution = torch.nn.Conv1d(self.database_num_features, conv_out, kernel_size=kernel_size, stride=stride)
-        self.lstm_out = lstm_out
-        self.lstm1 = torch.nn.LSTM(conv_out, lstm_out, bidirectional=True, dropout = dropout, num_layers = 2)
-        conv_out  = int(((max_length - int(kernel_size))/stride)+1)
-        in_val = lstm_out * 2 * conv_out
+        self.database_num_features = torch.tensor([nf])
+        self.convolution = torch.nn.Conv1d(self.database_num_features, co, kernel_size=ks, stride=st)
+        self.lo = lo
+        self.lstm1 = torch.nn.LSTM(co, lo, bidirectional=True, dropout = dropout, num_layers = 2)
+        co  = int(((ml - int(ks))/st)+1)
+        in_val = lo * 2 * co
         self.linear = torch.nn.Linear(100, 1)
-        self.lin1_add = torch.nn.Linear(12, lin1_nodes)
-        self.lin2_add = torch.nn.Linear(lin1_nodes, lin2_nodes)
-        self.linear = torch.nn.Linear(in_val+ lin2_nodes , 1)
+        self.lin1_add = torch.nn.Linear(12, n1)
+        self.lin2_add = torch.nn.Linear(n1, n2)
+        self.linear = torch.nn.Linear(in_val+ n2 , 1)
 
 
     def forward(self, data):
@@ -34,8 +32,8 @@ class LSTMb(torch.nn.Module):
         x = F.relu(self.convolution(x))
         x = x.permute(2, 0, 1)
 
-        hidden = (torch.zeros(4, batch_size, self.lstm_out),
-                  torch.zeros(4, batch_size, self.lstm_out))
+        hidden = (torch.zeros(4, batch_size, self.lo),
+                  torch.zeros(4, batch_size, self.lo))
 
         x, hidden = self.lstm1(x, hidden)
         x = x.permute(1, 0, 2)
@@ -47,5 +45,4 @@ class LSTMb(torch.nn.Module):
 
 
         return x
-
 

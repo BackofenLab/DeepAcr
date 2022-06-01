@@ -17,6 +17,9 @@ import random
 
 
 
+
+
+
 class Linearb(torch.nn.Module):
     def __init__(self, num_features, max_length, out1 = 197, out2 = 870, out3 = 71, out4 = 61, hidden_nodes = 81, dropout = 0.33015396090117194 ):
         super(Linearb, self).__init__()
@@ -24,21 +27,21 @@ class Linearb(torch.nn.Module):
 
         self.dropout = dropout
 
-        self.linear1 = torch.nn.Linear(max_length * num_features, 197)
+        self.linear1 = torch.nn.Linear(max_length * num_features, out1)
                 
-        self.linear2 = torch.nn.Linear(197, 870)
-        self.linear3 = torch.nn.Linear(870, 71)
-        self.linear4 = torch.nn.Linear(71, 61)
+        self.linear2 = torch.nn.Linear(out1, out2)
+        self.linear3 = torch.nn.Linear(out2, out3)
+        self.linear4 = torch.nn.Linear(out3, out4)
 
 
-        self.linear = torch.nn.Linear(61, 1)
+        self.linear = torch.nn.Linear(out4, 1)
 
 
-        self.lin1_add = torch.nn.Linear(12, 81)
-        self.lin2_add = torch.nn.Linear(81, 81)
-        self.lin3_add = torch.nn.Linear(81, 81)
+        self.lin1_add = torch.nn.Linear(12, hidden_nodes)
+        self.lin2_add = torch.nn.Linear(hidden_nodes, hidden_nodes)
+        self.lin3_add = torch.nn.Linear(hidden_nodes, hidden_nodes)
         self.lin_cat = torch.nn.Linear(
-            out4 + 81, 61)
+            out4 + hidden_nodes, out4)
 
         self.flatten = torch.nn.Flatten()
 
@@ -77,4 +80,5 @@ class Linearb(torch.nn.Module):
 
 
         return x
+
 

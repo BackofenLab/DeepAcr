@@ -8,24 +8,26 @@ import random
 
 
 class GRUb(torch.nn.Module):
-    def __init__(self, num_features,max_length):
+    def __init__(self, nf,ml, co = 50, ks = 17, st = 4,go = 16, hn = 100, hn2 = 83 ,dropout = 0.2104):
 
+        #    def __init__(self, num_features,max_length, conv_out = 50, kernel_size = 17, stride = 4,gru_out = 16, hidden_nodes = 100, hidden_nodes2 = 83 ,dropout = 0.2104):
 
         super(GRUb, self).__init__()
 
-        self.gru_out = 16
+        self.go = go
         self.bidirectional = True
-        self.dropout = 0.2104
-        self.database_num_features = torch.tensor([num_features])
+        self.dropout = dropout
+        self.database_nf = torch.tensor([nf])
 
-        self.convolution = torch.nn.Conv1d(self.database_num_features, 50, kernel_size=17, stride=4)
-        out = int(((max_length - int(17))/4)+1)
-        self.GRU = torch.nn.GRU(50, 16, bidirectional=True, dropout = 0.2104, num_layers = 2)
-        lin_in = 16*2 * out
-        self.linear = torch.nn.Linear(lin_in + 83 , 1)
+        self.convolution = torch.nn.Conv1d(self.database_nf, co, kernel_size=ks, stride=st)
+        out = int(((ml - int(ks))/st)+1)
+        self.dropout = dropout
+        self.GRU = torch.nn.GRU(co, go, bidirectional=True, dropout = dropout, num_layers = 2)
+        lin_in = go*2 * out
+        self.linear = torch.nn.Linear(lin_in + hn2, 1)
         self.softmax = torch.nn.Softmax(dim = 1)
-        self.lin1 = torch.nn.Linear(12,  100)
-        self.lin2 = torch.nn.Linear(100,   83)
+        self.lin1 = torch.nn.Linear(12,  hn)
+        self.lin2 = torch.nn.Linear(hn,  hn2)
 
 
     def forward(self, data):
@@ -43,7 +45,7 @@ class GRUb(torch.nn.Module):
         x = x.permute(0, 2, 1)
         x = F.relu(self.convolution(x))
         x = x.permute(2, 0, 1)
-        hidden = (torch.zeros(4, batch_size, self.gru_out).numpy())
+        hidden = (torch.zeros(4, batch_size, self.go).numpy())
         x, hidden = self.GRU(x, torch.tensor(hidden))
         #raise NotImplementedError
         #x = torch.squeeze(x,1)

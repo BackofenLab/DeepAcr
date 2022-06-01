@@ -15,21 +15,17 @@ from torch_scatter import scatter
 import random
 
 
-
-
-
-
 class Linear(torch.nn.Module):
-    def __init__(self, num_features, max_length):
+    def __init__(self, nf, ml, out1 = 548, out2= 36, out3 = 500, out4 = 115, dropout = 0.05226011067821744):
         super(Linear, self).__init__()
 
 
-        self.dropout = 0.05226011067821744
-        self.linear1 = torch.nn.Linear(max_length * num_features, 548)
-        self.linear2 = torch.nn.Linear(548, 36)
-        self.linear3 = torch.nn.Linear(36, 500)
-        self.linear4 = torch.nn.Linear(500, 115)
-        self.linear5 = torch.nn.Linear(115, 1)
+        self.dropout = dropout
+        self.linear1 = torch.nn.Linear(ml * nf, out1)
+        self.linear2 = torch.nn.Linear(out1, out2)
+        self.linear3 = torch.nn.Linear(out2, out3)
+        self.linear4 = torch.nn.Linear(out3, out4)
+        self.linear5 = torch.nn.Linear(out4, 1)
 
         self.softmax = torch.nn.Softmax(dim = 1)
 
@@ -56,4 +52,5 @@ class Linear(torch.nn.Module):
 
 
         return x
+
 

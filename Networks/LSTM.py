@@ -4,23 +4,19 @@ import numpy as np
 import pandas as pd
 import torch
 
-
-
-
 class LSTM(torch.nn.Module):
-
-    def __init__(self, num_features, max_length,   conv_out=9, dropout=0.5,
-                     lstm_out=14):
+    def __init__(self, nf, ml, ks=16, st=9, co=9, dropout=0.5,
+                     lo=14):
 
         super(LSTM, self).__init__()
 
-        self.dropout = 0.5
-        self.lstm_out = lstm_out
-        self.database_num_features = torch.tensor([num_features])
-        self.convolution = torch.nn.Conv1d(self.database_num_features, 9, kernel_size=16, stride=9)
-        self.lstm1 = torch.nn.LSTM(9, lstm_out, bidirectional=True, num_layers =2, dropout = 0.5)
-        conv_out  = int(((max_length - int(16))/9)+1)
-        in_val = lstm_out * 2 * conv_out
+        self.dropout = dropout
+        self.lo = lo
+        self.database_num_features = torch.tensor([nf])
+        self.convolution = torch.nn.Conv1d(self.database_num_features, co, kernel_size=ks, stride=st)
+        self.lstm1 = torch.nn.LSTM(co, lo, bidirectional=True, num_layers =2, dropout = dropout)
+        co  = int(((ml - int(ks))/st)+1)
+        in_val = lo * 2 * co
         self.linear = torch.nn.Linear(in_val, 1)
         self.softmax = torch.nn.Softmax(dim = 1)
 
@@ -36,8 +32,8 @@ class LSTM(torch.nn.Module):
         x = F.relu(self.convolution(x))
         x = x.permute(2, 0, 1)
 
-        hidden = (torch.zeros(4, batch_size, self.lstm_out),
-                  torch.zeros(4, batch_size, self.lstm_out))
+        hidden = (torch.zeros(4, batch_size, self.lo),
+                  torch.zeros(4, batch_size, self.lo))
 
         x, hidden = self.lstm1(x, hidden)
 
@@ -47,5 +43,4 @@ class LSTM(torch.nn.Module):
         x = self.linear(x)
 
         return x
-
 
