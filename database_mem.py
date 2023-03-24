@@ -355,6 +355,18 @@ class MyOwnDataset():
 
         return onehot_encoded
     
+    
+    def zeropad_or_cut(self, onehot_encoded, max_length, vector_size):
+    
+        onehot_encoded = onehot_encoded[:max_length]
+
+        to_pad = max_length - len(onehot_encoded)
+        for i in range(to_pad):
+            listofzeros = [0] * vector_size
+            onehot_encoded.append(listofzeros)
+            
+    
+        return onehot_encoded
 
 
     def create_graph(self, prot_type,protein, max_ = None):
@@ -376,15 +388,10 @@ class MyOwnDataset():
             edge_list.append([it+1, it])
 
         onehot_encoded = self.create_one_hot_vector(string_graph, dic_amino)
+        onehot_encoded = self.zeropad_or_cut(onehot_encoded, max_length, size)
+        
 
-
-        onehot_encoded = onehot_encoded[:max_length]
-        to_pad = max_length - len(onehot_encoded)
-
-        for i in range(to_pad):
-            listofzeros = [0] * size
-            onehot_encoded.append(listofzeros)
-
+        
         edge_index = torch.tensor(edge_list, dtype=torch.long)
         x = torch.tensor(onehot_encoded, dtype=torch.float)
         y = torch.tensor([prot_type], dtype=torch.int)
