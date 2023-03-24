@@ -336,31 +336,10 @@ class MyOwnDataset():
 
 
 
-
-    def create_graph(self, prot_type,protein, max_ = None):
-        dic_amino = self.read_yaml()
-        max_length = np.max(max_)
-
-        edge_list = []
+    def create_one_hot_vector(self, string_graph, dic_amino):
+        
         onehot_encoded = []
-        prot_id, string_graph = protein[1], protein[0]
-        l_length = len(string_graph)
         
-        if string_graph.endswith("*"): string_graph = string_graph[:-1]
-
-        #try:
-        z_data = analysis(string_graph)
-        #except:
-        #    print("additional information cannot be created for:")
-        #    print(prot_id)
-        #    print(string_graph)
-        #    sys.exit(2)
-        
-
-        for it in range(0, len(string_graph) -1):
-            edge_list.append([it, it+1])
-            edge_list.append([it+1, it])
-
         try:
             size = len(dic_amino.keys())
             for char in string_graph:
@@ -372,6 +351,32 @@ class MyOwnDataset():
         except TypeError:
             print("Aminoacid abbreviation " + char + " not found in aminoacid.yaml")
             sys.exit(2)
+            
+
+        return onehot_encoded
+    
+
+
+    def create_graph(self, prot_type,protein, max_ = None):
+        dic_amino = self.read_yaml()
+        size = len(dic_amino.keys())
+        max_length = np.max(max_)
+
+        edge_list = []
+
+        prot_id, string_graph = protein[1], protein[0]
+        l_length = len(string_graph)
+        
+        if string_graph.endswith("*"): string_graph = string_graph[:-1]
+        z_data = analysis(string_graph)
+        
+
+        for it in range(0, len(string_graph) -1):
+            edge_list.append([it, it+1])
+            edge_list.append([it+1, it])
+
+        onehot_encoded = self.create_one_hot_vector(string_graph, dic_amino)
+
 
         onehot_encoded = onehot_encoded[:max_length]
         to_pad = max_length - len(onehot_encoded)
